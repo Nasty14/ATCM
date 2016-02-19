@@ -1,4 +1,5 @@
-﻿
+﻿@using MVC.HelloWorld.Models;
+@model IEnumerable<PizzaViewModel>
 @{
     ViewBag.Title = "Pizza";
 }
@@ -6,3 +7,22 @@
 <h2>Pizza</h2>
 <p>I'm very hungry!</p>
 
+<ul>
+    @foreach (var item in Model)
+    {
+        <li> @item.Name - @item.Price</li>
+    }
+</ul>
+
+@using(Html.BeginForm())
+{
+    <input type="text" value="input here" />
+}
+@{
+    @:Hello World
+}
+
+@foreach(var key in ViewData.Keys)
+{
+    <p>@ViewData[key]</p>
+}
