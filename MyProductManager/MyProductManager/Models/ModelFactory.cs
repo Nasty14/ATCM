@@ -16,5 +16,12 @@ namespace MyProductManager.Models
                 Name = model.Name,
             };
         }
+
+        public Product GetProducts()
+        {
+           var prods = ()
+
+            return Product
+        }
     }
 }
