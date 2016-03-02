@@ -11,14 +11,26 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using MVCAuthentication.Models;
+using System.Net.Mail;
 
 namespace MVCAuthentication
 {
-    public class EmailService : IIdentityMessageService
+    public class EmailService : IIdentityMessageService //otpravljaet mail s podtverzhdeniem
     {
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
+            SmtpClient client = new SmtpClient();
+
+            var newmessage = new MailMessage
+            {
+                Body = message.Body,
+                Subject = message.Subject
+            };
+            newmessage.To.Add(message.Destination);
+
+            client.Send(newmessage);
+
             return Task.FromResult(0);
         }
     }
@@ -28,6 +40,7 @@ namespace MVCAuthentication
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your SMS service here to send a text message.
+
             return Task.FromResult(0);
         }
     }
@@ -40,6 +53,7 @@ namespace MVCAuthentication
         {
         }
 
+        //zadaem parametry passworda
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
@@ -47,7 +61,7 @@ namespace MVCAuthentication
             manager.UserValidator = new UserValidator<ApplicationUser>(manager) //vse zadano v Identity Library
             {
                 AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                RequireUniqueEmail = false
             };
 
             // Configure validation logic for passwords
@@ -89,7 +103,7 @@ namespace MVCAuthentication
     }
 
     // Configure the application sign-in manager which is used in this application.
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+    public class ApplicationSignInManager : SignInManager<ApplicationUser, string> //zapominaet pssw v kuki
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
