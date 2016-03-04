@@ -17,11 +17,22 @@ namespace MyProductManager.Models
             };
         }
 
-        public Product GetProducts()
+        public static ProductResponceModel Create(Product model)
         {
-           var prods = ()
-
-            return Product
+            return new ProductResponceModel
+            {
+                Id = model.ID,
+                Name = model.Name,
+                Categories = model.Category.Name
+            };
         }
+    }
+
+    public class ProductResponceModel //Create(Product model)
+    {
+
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Categories { get; set; }
     }
 }
